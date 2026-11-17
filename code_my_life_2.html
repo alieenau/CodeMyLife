@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Code My Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Nunito:wght@400;700;800&family=Pixelify+Sans:wght@600&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
+/* =========================================================
+   TEMA RETRO 8-BIT (font: Pixelify Sans, kode: JetBrains Mono) (SNES + SUPER MARIO)
+   Semua warna didefinisikan sebagai variabel di :root
+   ========================================================= */
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+/* palet inti */
+--merah:#E8212B;--biru:#2D5BE3;--kuning:#FFD400;--hijau:#2FB84A;
+--langit:#5C94FC;--abu-terang:#D8D8D8;--abu-gelap:#6B6B7A;
+--hitam:#1A1A1A;--putih:#FFFFFF;--bata:#C84C0C;
+/* turunan untuk mode malam dan efek */
+--malam:#101A5C;--panel-malam:#2A2F8F;--hitam-pekat:#000000;
+--tabir:rgba(26,26,26,.75);--sorot:rgba(255,212,0,.35);--sorot-err:rgba(232,33,43,.6);
+/* peran warna (mode terang) */
+--latar:var(--langit);--panel:var(--putih);--teks:var(--hitam);--garis:var(--hitam);
+--tinta:var(--hitam);--bayang-teks:var(--putih);--foco:var(--hitam);
+--bay:4px 4px 0 var(--tinta);
+--kode:var(--hitam);--kode-teks:var(--putih);
+--font:'Pixelify Sans','Trebuchet MS',system-ui,sans-serif;--font-kode:'JetBrains Mono',ui-monospace,monospace}
+
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+
+/* mode malam: mengikuti sistem, atau lewat tombol Tema */
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--latar:var(--malam);--panel:var(--panel-malam);--teks:var(--putih);--garis:var(--putih);--tinta:var(--hitam-pekat);--bayang-teks:var(--hitam-pekat);--foco:var(--kuning)}}
+:root[data-theme=dark]{--latar:var(--malam);--panel:var(--panel-malam);--teks:var(--putih);--garis:var(--putih);--tinta:var(--hitam-pekat);--bayang-teks:var(--hitam-pekat);--foco:var(--kuning)}
+
+*,*::before,*::after{box-sizing:inherit;border-radius:0}
+[hidden]{display:none!important}
+::selection{background:var(--kuning);color:var(--hitam)}
+body{margin:0;background:var(--latar);color:var(--teks);font:500 1rem/1.6 var(--font);overflow-wrap:break-word}
+b,strong,dt,th,h1,h2,h3{font-weight:600}
+.pix{font-family:var(--font);font-weight:600;line-height:1.15}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px}
+
+/* ---------- panel ---------- */
+.panel{background:var(--panel);color:var(--teks);border:4px solid var(--garis);box-shadow:var(--bay);padding:16px;min-width:0}
+
+/* ---------- tombol ala controller SNES ---------- */
+.tombol{font:600 1rem/1.25 var(--font);min-height:44px;padding:8px 16px;color:var(--hitam);background:var(--hijau);border:4px solid var(--garis);box-shadow:var(--bay);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.tombol:hover{filter:brightness(1.12)}
+.tombol.garis{background:var(--putih)}
+.tombol.madu{background:var(--kuning)}
+.tombol.btema{background:var(--biru);color:var(--putih);text-shadow:2px 2px 0 var(--hitam-pekat)}
+#bReset{background:var(--merah);color:var(--putih);text-shadow:2px 2px 0 var(--hitam-pekat)}
+.tombol[aria-pressed=true]{background:var(--kuning);color:var(--hitam);text-shadow:none;transform:translate(2px,2px);box-shadow:2px 2px 0 var(--tinta)}
+.tombol:disabled{background:var(--abu-gelap);color:var(--putih);text-shadow:none;cursor:not-allowed}
+.tombol:disabled:hover{filter:none}
+.tombol:active,.tombol[aria-pressed=true]:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--tinta);filter:brightness(.92)}
+.tombol:disabled:active{transform:none;box-shadow:var(--bay);filter:none}
+:focus-visible{outline:4px solid var(--foco);outline-offset:3px}
+.ed:focus-within{outline:4px solid var(--foco);outline-offset:3px}
+
+/* ---------- header / hero ---------- */
+.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center;
+ width:calc(100% - 32px);max-width:1148px;margin:24px auto;padding:32px 28px 48px;
+ background-color:var(--biru);background-image:linear-gradient(var(--merah),var(--merah));background-size:100% 14px;background-position:left bottom;background-repeat:no-repeat;
+ color:var(--putih);border:4px solid var(--garis);box-shadow:var(--bay)}
+.hero h1{font-size:clamp(2.4rem,8vw,4.4rem);line-height:1.05;margin:0 0 12px;color:var(--putih);text-shadow:4px 4px 0 var(--hitam-pekat);overflow-wrap:anywhere}
+.hero .sub{font-size:1.4rem;line-height:1.3;margin:0 0 16px;color:var(--putih)}
+.hero p.tag{font-size:1.15rem;max-width:40ch;margin:0 0 24px;color:var(--putih)}
+.hero .aksi{display:flex;gap:16px;flex-wrap:wrap}
+@keyframes goyang{50%{transform:translateY(-8px)}}
+.hero .mas{animation:goyang 2.4s steps(2) infinite}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* ---------- bagian beranda ---------- */
+h2.pix{font-size:clamp(1.6rem,4.5vw,2.2rem);line-height:1.15;margin:0 0 16px;color:var(--teks);text-shadow:2px 2px 0 var(--bayang-teks)}
+.tiga{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.tiga .panel{background-repeat:no-repeat;background-size:100% 10px;background-position:left top;padding-top:26px}
+.tiga .panel:nth-child(3n+1){background-image:linear-gradient(var(--merah),var(--merah))}
+.tiga .panel:nth-child(3n+2){background-image:linear-gradient(var(--biru),var(--biru))}
+.tiga .panel:nth-child(3n+3){background-image:linear-gradient(var(--hijau),var(--hijau))}
+.tiga h3{margin:0 0 6px;font-size:1.3rem;line-height:1.2}
+.tiga p{margin:0}
+dl{margin:0}
+dt{display:inline-block;margin-top:14px;padding:2px 8px;background:var(--biru);color:var(--putih)}
+dt:first-child{margin-top:0}
+dd{margin:8px 0 0;padding-bottom:12px;border-bottom:4px dashed var(--bata)}
+dd:last-child{border-bottom:0;padding-bottom:0}
+
+/* ---------- HUD ---------- */
+.hud{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-bottom:16px}
+.hud .judul{font-size:1.3rem;margin-right:auto}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.hud span b{display:inline-block;padding:2px 8px;background:var(--hitam);color:var(--kuning);font-family:var(--font-kode);font-size:.9rem;font-variant-numeric:tabular-nums}
+.bintang{display:inline-block;font-size:1.4rem;line-height:1.6;letter-spacing:2px;color:var(--kuning);background:var(--hitam);border:3px solid var(--garis);padding:2px 10px}
+
+/* ---------- area permainan ---------- */
+.gim{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-bottom:16px}
+canvas{width:100%;height:auto;aspect-ratio:5/4;image-rendering:pixelated;border:4px solid var(--garis);background:var(--putih);display:block;cursor:crosshair}
+.ctrl{display:flex;gap:8px 12px;align-items:center;flex-wrap:wrap;margin-top:12px}
+select{min-height:44px;font:600 1rem var(--font);border:4px solid var(--garis);box-shadow:var(--bay);background:var(--putih);color:var(--hitam);padding:0 8px}
+
+/* editor kode */
+.ed{display:flex;height:288px;border:4px solid var(--garis);background:var(--kode);position:relative;overflow:hidden}
+.gut,#kode{font:400 .875rem/24px var(--font-kode);padding:8px 6px;height:100%;margin:0}
+.gut{width:44px;text-align:right;color:var(--abu-terang);overflow:hidden;white-space:pre;user-select:none;border-right:3px dashed var(--abu-gelap)}
+#kode{flex:1;min-width:0;border:0;background:transparent;color:var(--kode-teks);caret-color:var(--kuning);resize:none;white-space:pre;overflow:auto;tab-size:4;outline:none;position:relative;z-index:1}
+.hl{position:absolute;left:0;right:0;height:24px;background:var(--sorot);pointer-events:none}
+.hl.err{background:var(--sorot-err)}
+.mono{font-family:var(--font-kode);font-size:.8rem;line-height:1.7}
+
+/* konsol */
+#kpan{max-height:260px;overflow:auto;scrollbar-color:var(--abu-gelap) var(--hitam)}
+#kons{height:110px;overflow:auto;margin:8px 0;padding:8px;white-space:pre-wrap;background:var(--hitam);color:var(--hijau);border:4px solid var(--garis);scrollbar-color:var(--abu-gelap) var(--hitam)}
+#kode{scrollbar-color:var(--abu-gelap) var(--hitam)}
+
+/* status hasil */
+.ok,.gagal{padding:2px 6px}
+.ok{background:var(--hijau);color:var(--hitam)}
+.gagal{background:var(--merah);color:var(--putih);text-shadow:2px 2px 0 var(--hitam-pekat)}
+p.ok,p.gagal{display:block;padding:8px 10px;margin:8px 0;border:3px solid var(--garis)}
+.rm{margin:8px 0 0;padding-left:20px}
+.rm li{margin:8px 0}
+.pm{background:var(--putih);color:var(--hitam);border:3px solid var(--garis);border-left:10px solid var(--merah);padding:8px 12px;margin-top:8px}
+.pm p{margin:6px 0}
+ul.cmd{margin:6px 0 8px;padding-left:20px}
+ul.cmd li{font-family:var(--font-kode);font-size:.8rem;line-height:1.7;margin-bottom:4px;overflow-wrap:anywhere}
+
+/* ---------- peta babak ---------- */
+.peta{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.bab{text-align:left;font:inherit;color:var(--teks);cursor:pointer;line-height:1.4}
+.bab .pix{display:inline-block;margin-bottom:6px;padding:2px 8px;background:var(--biru);color:var(--putih)}
+.bab:hover:not(:disabled){filter:brightness(1.1)}
+.bab:active:not(:disabled){transform:translate(4px,4px);box-shadow:0 0 0 var(--tinta)}
+.bab:disabled{background:var(--abu-gelap);color:var(--putih);cursor:not-allowed}
+.bab:disabled .pix{background:var(--hitam)}
+
+/* ---------- dialog ---------- */
+dialog{border:4px solid var(--garis);box-shadow:var(--bay);background:var(--panel);color:var(--teks);padding:24px;width:min(600px,calc(100vw - 32px));max-height:85vh;overflow:auto;scrollbar-color:var(--abu-gelap) var(--hitam)}
+dialog::backdrop{background:var(--tabir)}
+dialog h3{font-size:1.5rem;line-height:1.2;margin:0 0 12px}
+.dact{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+
+/* ---------- maskot ---------- */
+.mas{image-rendering:pixelated}
+.mas.besar{width:100%;max-width:300px;justify-self:center}
+.mas.kecil{width:72px;float:right;margin:0 0 8px 12px}
+
+/* ---------- layar game ---------- */
+.gtop{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.gtop h2{margin:0;flex:1;min-width:min(100%,220px);font-size:1.4rem}
+.soal{display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:center}
+.soal .panel{padding:24px;font-size:1.1rem}
+.gimg{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+.kanan{display:grid;gap:16px;min-width:0}
+
+/* ---------- tutorial (sorotan) ---------- */
+.spot{position:relative;z-index:60;box-shadow:0 0 0 4px var(--kuning),0 0 0 100vmax var(--tabir)}
+#tov{position:fixed;inset:0;z-index:55}
+.tb{position:fixed;z-index:70;width:min(360px,calc(100vw - 16px));background:var(--panel);color:var(--teks);border:4px solid var(--garis);box-shadow:var(--bay);padding:14px}
+.tb p{margin:0 0 8px}
+
+/* ---------- footer: bata ---------- */
+footer.wrap{width:calc(100% - 32px);max-width:1148px;margin:24px auto 40px;padding:20px 24px;background:var(--bata);color:var(--putih);border:4px solid var(--garis);box-shadow:var(--bay);font-size:.9rem;line-height:1.6}
+footer.wrap::before{content:"";display:block;height:20px;margin:-20px -24px 16px;border-bottom:4px solid var(--hitam);
+ background-color:var(--bata);background-image:linear-gradient(var(--hitam) 2px,transparent 2px),linear-gradient(90deg,var(--hitam) 2px,transparent 2px);background-size:32px 16px}
+
+/* ---------- responsif ---------- */
+@media(max-width:1100px){.peta{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.hero,.tiga,.gim{grid-template-columns:1fr}.peta{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.soal,.gimg{grid-template-columns:1fr}.hero .mas{order:-1;max-width:160px}}
+@media(max-width:600px){
+ .wrap{padding:16px 12px}
+ .hero{width:calc(100% - 24px);margin:16px auto;padding:20px 16px 36px;gap:20px}
+ .panel{padding:12px}
+ .soal .panel{padding:16px}
+ .peta{grid-template-columns:1fr}
+ footer.wrap{width:calc(100% - 24px);padding:16px}
+ footer.wrap::before{margin:-16px -16px 12px}
+ dialog{padding:16px}
+}
+
+/* ---------- baris tombol aksi editor: 1 baris ---------- */
+.ctrl:has(#bJalan){flex-wrap:nowrap;gap:6px}
+.ctrl:has(#bJalan) .tombol{flex:1 1 auto;min-width:0;padding:6px 8px;font-size:.9rem;white-space:nowrap}
+.ctrl:has(#bJalan)>span{display:none}
+@media(max-width:520px){.ctrl:has(#bJalan){gap:4px}.ctrl:has(#bJalan) .tombol{padding:6px 4px;font-size:.75rem;border-width:3px;box-shadow:3px 3px 0 var(--tinta)}.ctrl:has(#bJalan) .tombol:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--tinta)}}
+
+/* ---------- panel kanvas (kiri) menempel saat halaman di-scroll ---------- */
+@media(min-width:901px){.gimg>.panel:first-child{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));align-self:start}}
+
+/* =========================================================
+   TEMA TERANG vs GELAP (benar-benar berbeda)
+   Terang: dominan putih/terang. Gelap: dominan arang gelap.
+   Warna primer retro dipakai sebagai aksen di keduanya.
+   ========================================================= */
+:root{
+--terang:#EEF4FF;--malam:#1B1B2B;--panel-malam:#2A2A3E;--kode-malam:#14141F;--netral-malam:#3F3F5A;
+--latar:var(--terang);--panel:var(--putih);--teks:var(--hitam);--garis:var(--hitam);--tinta:var(--hitam);
+--bayang-teks:var(--kuning);--foco:var(--hitam);--judul:var(--biru);
+--kode:var(--putih);--kode-teks:var(--hitam);--kode-nomor:var(--abu-gelap);--caret:var(--biru);
+--kons-bg:var(--terang);--kons-teks:var(--hitam);--netral:var(--putih);--netral-teks:var(--hitam);--trek:var(--terang)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+--latar:var(--malam);--panel:var(--panel-malam);--teks:var(--putih);--garis:var(--abu-terang);--tinta:var(--hitam-pekat);
+--bayang-teks:var(--merah);--foco:var(--kuning);--judul:var(--kuning);
+--kode:var(--kode-malam);--kode-teks:var(--putih);--kode-nomor:var(--abu-terang);--caret:var(--kuning);
+--kons-bg:var(--kode-malam);--kons-teks:var(--hijau);--netral:var(--netral-malam);--netral-teks:var(--putih);--trek:var(--kode-malam)}}
+:root[data-theme=dark]{
+--latar:var(--malam);--panel:var(--panel-malam);--teks:var(--putih);--garis:var(--abu-terang);--tinta:var(--hitam-pekat);
+--bayang-teks:var(--merah);--foco:var(--kuning);--judul:var(--kuning);
+--kode:var(--kode-malam);--kode-teks:var(--putih);--kode-nomor:var(--abu-terang);--caret:var(--kuning);
+--kons-bg:var(--kode-malam);--kons-teks:var(--hijau);--netral:var(--netral-malam);--netral-teks:var(--putih);--trek:var(--kode-malam)}
+
+/* header: panel terang/gelap dengan strip biru (atas) dan merah (bawah) */
+.hero{background-color:var(--panel);color:var(--teks);
+ background-image:linear-gradient(var(--biru),var(--biru)),linear-gradient(var(--merah),var(--merah));
+ background-size:100% 12px,100% 12px;background-position:left top,left bottom;background-repeat:no-repeat;padding:44px 28px 48px}
+.hero h1{color:var(--judul);text-shadow:4px 4px 0 var(--tinta)}
+.hero .sub,.hero p.tag{color:var(--teks)}
+
+/* tombol netral + select mengikuti tema */
+.tombol.garis{background:var(--netral);color:var(--netral-teks)}
+.tombol.garis.btema{background:var(--biru);color:var(--putih)}
+.tombol.garis[aria-pressed=true]{background:var(--kuning);color:var(--hitam)}
+.tombol.garis:disabled{background:var(--abu-gelap);color:var(--putih)}
+select{background:var(--netral);color:var(--netral-teks)}
+
+/* editor, konsol, kotak error */
+.gut{color:var(--kode-nomor)}
+#kode{caret-color:var(--caret)}
+#kons{background:var(--kons-bg);color:var(--kons-teks)}
+#kpan,#kons,#kode,dialog{scrollbar-color:var(--abu-gelap) var(--trek)}
+.pm{background:var(--kode);color:var(--teks)}
+
+/* aksen warna: strip warna di tepi atas tiap panel */
+.tiga .panel:nth-child(n),.hud,.gimg>.panel:first-child,.kanan>.panel:first-child,#perintah,#kpan,.tb,dialog{
+ background-color:var(--panel);color:var(--teks);
+ background-image:linear-gradient(var(--c,var(--merah)),var(--c,var(--merah)));
+ background-size:100% 10px;background-position:left top;background-repeat:no-repeat;padding-top:28px}
+.hud{padding-top:24px;--c:var(--biru)}
+.gimg>.panel:first-child{--c:var(--merah)}
+.kanan>.panel:first-child{--c:var(--biru)}
+#perintah{--c:var(--hijau)}
+#kpan{--c:var(--kuning)}
+.tb{--c:var(--kuning)}
+dialog{--c:var(--merah);padding-top:36px}
+.tiga .panel:nth-child(4n+1){--c:var(--merah)}
+.tiga .panel:nth-child(4n+2){--c:var(--biru)}
+.tiga .panel:nth-child(4n+3){--c:var(--hijau)}
+.tiga .panel:nth-child(4n+4){--c:var(--kuning)}
+
+/* peta babak: kartu panel dengan strip warna di kiri */
+.peta .bab{background-color:var(--panel);color:var(--teks);
+ background-image:linear-gradient(var(--c),var(--c));background-size:14px 100%;background-position:left center;background-repeat:no-repeat;padding-left:30px}
+.peta .bab:nth-child(4n+1){--c:var(--merah);--ct:var(--putih)}
+.peta .bab:nth-child(4n+2){--c:var(--biru);--ct:var(--putih)}
+.peta .bab:nth-child(4n+3){--c:var(--hijau);--ct:var(--hitam)}
+.peta .bab:nth-child(4n+4){--c:var(--kuning);--ct:var(--hitam)}
+.peta .bab .pix{background:var(--c);color:var(--ct)}
+.peta .bab:hover:not(:disabled){filter:none;transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--tinta)}
+.peta .bab:active:not(:disabled){transform:translate(4px,4px);box-shadow:0 0 0 var(--tinta)}
+.peta .bab:disabled{background-color:var(--abu-gelap);background-image:none;color:var(--putih);padding-left:16px}
+.peta .bab:disabled .pix{background:var(--hitam);color:var(--putih)}
+@media(max-width:600px){.hero{padding:36px 16px 40px}}
+</style>
+</head>
+<body>
+<div id="vHome">
+<header class="wrap hero">
+ <div>
+  <h1 class="pix">Code My Life</h1>
+  <p class="sub pix">Belajar Python lewat rutinitas sehari-hari</p>
+  <p class="tag">Tulis skripnya, biarkan karaktermu menyelesaikan rutinitas!</p>
+  <div class="aksi"><button class="tombol" id="bMain" type="button">Mulai Main</button><button class="tombol garis" id="bCara" type="button">Lihat Cara Kerja</button><button class="tombol garis btema" type="button">Tema</button></div>
+ </div>
+ <img class="mas besar" alt="Karakter pixel Code My Life: makhluk kuning berkacamata hitam">
+</header>
+<section class="wrap" id="cara">
+ <h2 class="pix">Fitur Utama</h2>
+ <div class="tiga">
+  <div class="panel"><h3>Python sungguhan</h3><p>Tulis loop, kondisi, dan fungsi di editor. Jalankan gratis untuk mencoba, Kirim untuk menguji.</p></div>
+  <div class="panel"><h3>Botu dan baterai</h3><p>Botu menjalankan skripmu. Tiap langkah memakai baterai, jadi kode yang hemat lebih baik.</p></div>
+  <div class="panel"><h3>Situasi uji</h3><p>Kirim mencoba kodemu di beberapa situasi (letak benda berubah), jadi tidak cuma cocok untuk satu contoh.</p></div>
+  <div class="panel"><h3>Error yang membantu</h3><p>Baris yang salah disorot dan dijelaskan penyebabnya. Tidak ada Game Over.</p></div>
+  <div class="panel"><h3>Bintang 1 sampai 3</h3><p>1 = lulus. 2 = lulus di semua situasi. 3 = juga singkat dan hemat. Hint tidak mengurangi bintang.</p></div>
+  <div class="panel"><h3>Hari Kritis</h3><p>Level penutup tiap babak, dengan jam game dan tenggat waktu. Progresmu tersimpan di browser.</p></div>
+ </div>
+</section>
+<section class="wrap" id="peta"><h2 class="pix">Peta Babak</h2><p>Lulus dengan 1 bintang untuk membuka level berikutnya. Babak baru terbuka setelah babak sebelumnya selesai.</p><div class="peta" id="petag"></div></section>
+<footer class="wrap">Prototipe: kodemu dijalankan oleh interpreter Python-mini (for, while, if/elif/else, def, list). Versi penuh memakai Python asli.</footer>
+</div>
+<div id="vGame" class="wrap" hidden>
+ <div class="gtop"><button class="tombol garis" id="bHome" type="button">← Beranda</button><h2 class="pix" id="bab"></h2><button class="tombol garis btema" type="button">Tema</button></div>
+ <div class="panel hud">
+  <b class="pix judul" id="jl"></b><div class="tabs" id="tabs" role="tablist" aria-label="Pilih level"></div>
+  <span id="wBat" title="Jatah langkah Botu">Baterai Botu: <b id="bat">300</b></span><span id="wJam">Jam game: <b id="jam">06:00</b></span><span class="bintang" id="bin" aria-label="Bintang level">☆☆☆</span>
+ </div>
+ <section id="sSoal" class="soal"><div class="panel" id="brief"></div><img class="mas besar" alt=""></section>
+ <section id="sMain" hidden>
+  <div class="gimg">
+   <div class="panel"><canvas id="dunia" width="400" height="320" role="img" aria-label="Kamar kos 10 kali 8 petak. Koordinat (0, 0) di kiri atas."></canvas>
+    <div class="ctrl"><label for="sp">Kecepatan</label><select id="sp"><option value="1">1x</option><option value="2" selected>2x</option><option value="5">5x</option><option value="20">20x</option></select><span class="mono" id="insp" role="status">Klik petak untuk memeriksa isinya.</span></div></div>
+   <div class="kanan">
+    <div class="panel"><div id="edwrap"><div class="ed"><pre class="gut" id="gut" aria-hidden="true"></pre><div class="hl" id="hl" hidden></div><textarea id="kode" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Editor kode Python" wrap="off"></textarea></div></div>
+     <div class="ctrl"><button class="tombol" id="bJalan" type="button">Jalankan</button><button class="tombol madu" id="bKirim" type="button">Kirim</button><button class="tombol garis" id="bLangkah" type="button">Langkah</button><span style="margin-left:auto"></span><button class="tombol garis" id="bReset" type="button">Reset</button><button class="tombol garis" id="bHint" type="button">Hint (?)</button></div>
+     <div class="ctrl"><button class="tombol garis" id="bSoal" type="button">Lihat Soal</button><button class="tombol garis" id="bPandu" type="button">Panduan</button><span class="mono">Ctrl+Enter = Jalankan</span></div></div>
+    <div class="gim"><div class="panel" id="perintah"></div><div class="panel" id="kpan"><b>Konsol</b><pre id="kons" class="mono" role="log" aria-live="polite"></pre><div id="hasil" aria-live="polite"></div></div></div>
+   </div>
+  </div>
+ </section>
+</div>
+<div id="tov" hidden></div>
+<div class="tb" id="tb" hidden role="dialog" aria-label="Panduan"><img class="mas kecil" alt=""><p id="tt"></p><div class="ctrl"><span class="mono" id="tn"></span><span style="margin-left:auto"></span><button class="tombol garis" id="tskip" type="button">Lewati</button><button class="tombol madu" id="tnext" type="button">Lanjut</button></div></div>
+<dialog id="dlg" aria-label="Pesan dari Botu"><div id="dbody"></div><div class="dact" id="dact"></div></dialog>
+<script>
+(()=>{
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rng=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const H=(k,seed,n,cap=300,ex)=>({k,seed,n,cap,ex});
+const W3={fix:[[3,1],[4,3]],walls:[[1,0],[1,1],[1,2]]},K=(k,cap,stok,uang,need)=>({k,cap,stok,uang,need});
+const KT=(k,cap,stok,mulai)=>({...K(k,cap,stok,30000,{telur:3,nasi:4,mie:3}),mulai,tenggat:360}),P=(k,dur)=>({k,cap:300,dur,tenggat:90});
+const LV=[
+{id:'0-1',b:0,judul:'Halo, Botu',konsep:'satu perintah jalan dan argumen',man:[5,1],t3:[8,3],mix:false,
+ cerita:'Hari pertama di Kos Melati. Botu baru dinyalakan dan hanya bergerak kalau diperintah. Ada satu sampah di kamar.',
+ tujuan:'Antar Botu ke sampah, lalu buang.',api:['robot.jalan_ke([x, y])','robot.buang()','robot.catat("teks")'],
+ hari:[H('Contoh',7,1,300,'dekat'),H('Ulang',7,1,300,'dekat')],
+ kode:'robot.catat("Halo, Botu!")\n# tambahkan perintah jalan_ke dan buang di bawah ini\n',
+ hint:['Lihat kanvas: di petak mana sampahnya? Angka di tepi kanvas menunjukkan koordinat [x, y].','Botu berjalan dengan robot.jalan_ke([x, y]). Angka pertama adalah kolom (ke kanan), angka kedua adalah baris (ke bawah).','robot.jalan_ke([..., ...])\nrobot.buang()']},
+{id:'0-2',b:0,judul:'Ambil dan buang',konsep:'urutan beberapa perintah',man:[10,1],t3:[24,7],mix:false,
+ cerita:'Kardus-kardus sudah dibuka dan sampahnya berserakan. Ada tiga sampah, letaknya selalu sama. Urutan perintah menentukan hasilnya.',
+ tujuan:'Buang ketiga sampah.',api:['robot.jalan_ke([x, y])','robot.buang()','robot.catat("teks")'],
+ hari:[H('Contoh',8,3),H('Ulang',8,3)],
+ kode:'# Klik petak di kanvas untuk memeriksa isinya, lalu tulis perintah Botu di sini\n',
+ hint:['Tiap sampah butuh dua perintah: pergi ke sana, lalu buang. Ulangi untuk tiap sampah.','Klik petak di kanvas untuk memeriksa isinya, lalu catat koordinat ketiga sampah.','robot.jalan_ke([..., ...])\nrobot.buang()\nrobot.jalan_ke([..., ...])\nrobot.buang()\n...']},
+{id:'0-3',b:0,judul:'Jalan buntu',konsep:'membaca error JalanBuntu',man:[10,1],t3:[14,4],mix:false,
+ cerita:'Kardus-kardus menumpuk dekat pintu dan menghalangi jalan. Botu tidak bisa menembus kardus. Jalankan dulu skrip awalnya dan baca errornya.',
+ tujuan:'Buang kedua sampah tanpa menabrak kardus.',api:['robot.jalan_ke([x, y])','robot.buang()','robot.catat("teks")'],
+ hari:[{...H('Contoh',1,2),...W3},{...H('Ulang',1,2),...W3}],
+ kode:'robot.jalan_ke([1, 1])  # coba Jalankan dulu dan baca errornya\nrobot.buang()\n',
+ hint:['Baca error JalanBuntu: titik mana yang tidak bisa dicapai, dan kenapa?','Kardus adalah kotak cokelat di kanvas. Pilih tujuan di petak yang bukan kardus, Botu mencari jalan memutar sendiri.','Ganti [1, 1] dengan koordinat sampah, lalu buang. Ulangi untuk sampah kedua.']},
+{id:'0-4',b:0,judul:'Baterai tipis',konsep:'urutan rute dan biaya baterai',man:[10,1],t3:[20,7],mix:false,
+ cerita:'Kabel pengisi daya ketinggalan di kamar lama. Baterai Botu tinggal 24, padahal ada tiga sampah. Urutan kunjungan menentukan boros atau hemat.',
+ tujuan:'Buang ketiga sampah sebelum baterai habis.',api:['robot.jalan_ke([x, y])','robot.buang()','robot.catat("teks")'],
+ hari:[H('Contoh',10,3,24),H('Ulang',10,3,24)],
+ kode:'# Setiap petak yang dilewati memakai 1 baterai, setiap buang memakai 2\n',
+ hint:['Sampah mana yang paling dekat dengan Botu? Dari sana, sampah mana yang paling dekat berikutnya?','Satu langkah ke petak sebelah memakai 1 baterai. Urutan kunjungan yang bagus bisa menghemat beberapa baterai.','Urutkan sampah dari yang paling dekat dengan posisi Botu, lalu hitung biayanya: jumlah langkah ditambah 2 untuk tiap buang.']},
+{id:'1-1',b:1,judul:'Sampah di lantai',konsep:'perulangan for dan range',man:[25,2],t3:[70,4],mix:false,
+ cerita:'Bu Rini menengok kamarmu: lima sampah berserakan. Botu hanya mengerti skrip.',
+ tujuan:'Buang semua sampah di lantai.',api:['robot.jalan_ke(titik)','robot.buang()','kamar.kotoran_terdekat()'],
+ hari:[H('Contoh',11,5),H('Biasa',22,5),H('Sibuk',33,5),H('Kejutan: listrik mati (baterai awal 90)',44,5,90),H('Ekstrem: semua menumpuk di pojok',55,5,300,'pojok')],
+ kode:'jumlah_sampah = 5\nfor i in range(jumlah_sampah):\n    pass  # ganti dengan perintah Botu\n',
+ hint:['Apa yang harus Botu lakukan di setiap putaran loop? Urutannya: ke mana dulu, lalu apa?','Pakai kamar.kotoran_terdekat() sebagai tujuan robot.jalan_ke(...), lalu panggil robot.buang().','for i in range(jumlah_sampah):\n    robot.jalan_ke(...)\n    robot.....()']},
+{id:'1-2',b:1,judul:'Pilah sampah dan baju',konsep:'if, elif, dan robot.lihat()',man:[40,3],t3:[140,10],mix:true,
+ cerita:'Sekarang ada baju kotor di antara sampah. Botu harus memeriksa apa yang ada di petak sebelum bertindak. Jumlah bendanya selalu 6. Mesin cuci ada di (9, 0).',
+ tujuan:'Buang semua sampah dan masukkan semua baju ke mesin cuci.',api:['robot.jalan_ke(titik)','robot.lihat()','robot.angkut()','robot.buang()','robot.taruh(mesin_cuci)','kamar.kotoran_terdekat()'],
+ hari:[H('Contoh',13,6),H('Biasa',24,6),H('Sibuk',35,6),H('Kejutan: listrik mati (baterai awal 200)',46,6,200),H('Ekstrem: semua menumpuk di pojok',57,6,300,'pojok')],
+ kode:'jumlah_benda = 6\nfor i in range(jumlah_benda):\n    robot.jalan_ke(kamar.kotoran_terdekat())\n    benda = robot.lihat()\n    pass  # periksa benda, lalu bertindak\n',
+ hint:['Kalau Botu selalu memanggil buang(), apa yang terjadi saat bendanya baju?','Simpan hasil robot.lihat() ke variabel, lalu bandingkan dengan teks: benda == "sampah".','if benda == "sampah":\n    robot.buang()\nelif benda == "baju":\n    robot.angkut()\n    robot.jalan_ke(...)\n    robot.taruh(...)']},
+{id:'1-3',b:1,judul:'Sampai bersih',konsep:'while, if/elif, dan sensor',man:[45,4],t3:[180,10],mix:true,
+ cerita:'Sampah dan baju kotor bercampur, dan jumlahnya berubah tiap hari. Loop harus berhenti sendiri saat kamar bersih. Mesin cuci ada di pojok kanan atas (9, 0).',
+ tujuan:'Buang semua sampah dan masukkan semua baju ke mesin cuci.',api:['robot.jalan_ke(titik)','robot.lihat()','robot.angkut()','robot.buang()','robot.taruh(mesin_cuci)','kamar.bersih()','kamar.kotoran_terdekat()'],
+ hari:[H('Contoh',12,6),H('Biasa',23,8),H('Sibuk',34,12),H('Kejutan: listrik mati (baterai awal 230)',45,8,230),H('Ekstrem: kamar sudah bersih',56,0)],
+ kode:'while not kamar.bersih():\n    pass  # ganti dengan perintah Botu\n',
+ hint:['Apa yang terjadi kalau Botu melihat benda yang berbeda? Baju dan sampah punya tujuan akhir yang berbeda.','Gunakan if/elif untuk memeriksa hasil robot.lihat() sebelum bertindak.','while not kamar.bersih():\n    robot.jalan_ke(kamar.kotoran_terdekat())\n    benda = robot.lihat()\n    if benda == "sampah":\n        ...\n    elif benda == "baju":\n        ...']},
+{id:'1-4',b:1,jemur:true,judul:'Hujan di jemuran',konsep:'kondisi cuaca dan menunda tugas',man:[35,3],t3:[100,9],mix:false,
+ cerita:'Cucian basah menumpuk di lantai dan harus dijemur di halaman, di petak (9, 7). Tapi cuaca di kota kos ini tidak bisa ditebak, dan baju yang dijemur saat hujan basah lagi.',
+ tujuan:'Jemur semua baju di jemuran tanpa kehujanan.',api:['robot.jalan_ke(titik)','robot.angkut()','robot.taruh(jemuran)','robot.tunggu(menit)','cuaca()','kamar.bersih()','kamar.kotoran_terdekat()'],
+ hari:[{...H('Contoh',61,3),hujan:0},{...H('Biasa',62,3),hujan:45},{...H('Sibuk',63,3),hujan:70},{...H('Kejutan: listrik mati (baterai awal 110)',64,3,110),hujan:45},{...H('Ekstrem: hujan lama',65,3),hujan:150}],
+ kode:'while not kamar.bersih():\n    pass  # angkut baju, bawa ke jemuran, dan perhatikan cuaca\n',
+ hint:['Apa yang harus Botu lakukan kalau sampai di jemuran dan ternyata hujan? Menunggu tidak memakai baterai.','cuaca() mengembalikan "hujan" atau "cerah". Gunakan while untuk menunggu selama hujan, lalu robot.tunggu(10).','while not kamar.bersih():\n    robot.jalan_ke(kamar.kotoran_terdekat())\n    robot....()\n    robot.jalan_ke(jemuran)\n    while cuaca() == ...:\n        robot.tunggu(10)\n    robot.taruh(jemuran)']},
+{id:'1-5',b:1,dunia:'pagi',judul:'Pagi Kacau',konsep:'list dan loop atas list (Hari Kritis)',man:[60,2],t3:[0,4],
+ cerita:'Hari Kritis! Kamu bangun terlambat. Mandi, sarapan, dan bersih-bersih harus selesai, lalu berangkat sebelum 07.30. Urutan tugasnya kamu susun sendiri di sebuah list.',
+ tujuan:'Selesaikan keempat tugas, dengan berangkat paling akhir, sebelum 07.30.',api:['robot.kerjakan("mandi")','robot.kerjakan("sarapan")','robot.kerjakan("bersih")','robot.kerjakan("berangkat")','for tugas in daftar:'],
+ hari:[P('Contoh',{mandi:15,sarapan:15,bersih:20,berangkat:5}),P('Biasa',{mandi:20,sarapan:20,bersih:30,berangkat:5}),P('Sibuk',{mandi:25,sarapan:20,bersih:35,berangkat:5}),P('Kejutan: listrik mati (air dingin, mandi lama)',{mandi:30,sarapan:20,bersih:30,berangkat:5}),P('Ekstrem: semuanya lambat',{mandi:25,sarapan:25,bersih:35,berangkat:5})],
+ kode:'urutan = []  # isi dengan nama tugas: "mandi", "sarapan", "bersih", "berangkat"\n# lalu kerjakan setiap tugas di dalam urutan\n',
+ hint:['Tugas apa yang harus selesai sebelum berangkat? Susun namanya dalam sebuah list, berurutan.','Setelah list jadi, for tugas in urutan: akan mengambil satu per satu. Di dalam loop, panggil robot.kerjakan(tugas).','urutan = ["...", "...", "...", "..."]\nfor tugas in urutan:\n    robot.kerjakan(...)']},
+{id:'2-1',b:2,dunia:'dapur',wajib:1,judul:'Telur dadar',konsep:'def tanpa parameter',man:[30,2],t3:[15,6],
+ cerita:'Siang ini kamu masak telur dadar, tiga porsi. Menulis langkah yang sama tiga kali itu melelahkan. Bungkus langkahnya jadi satu fungsi.',
+ tujuan:'Buat 3 porsi telur dadar dengan fungsi buatanmu sendiri.',api:['def nama():  (membuat fungsi)','robot.nyalakan(kompor)','robot.olah("telur", porsi)','dapur.stok("telur")'],
+ hari:[K('Contoh',60,{telur:5},20000,{telur:3}),K('Ulang',60,{telur:5},20000,{telur:3}),K('Kejutan: baterai awal 25',25,{telur:5},20000,{telur:3})],
+ kode:'def telur_dadar():\n    pass  # nyalakan kompor, lalu olah 1 telur\n\n# panggil fungsinya 3 kali\n',
+ hint:['Langkah membuat satu telur dadar selalu sama. Apa saja langkahnya, berurutan?','Bungkus langkah itu dalam def telur_dadar(): lalu panggil telur_dadar() tiga kali. Kamu boleh memakai for.','def telur_dadar():\n    robot....(kompor)\n    robot....("telur", 1)\n\nfor i in range(...):\n    ...']},
+{id:'2-2',b:2,dunia:'dapur',wajib:1,judul:'Resep serbaguna',konsep:'def dengan parameter',man:[40,2],t3:[20,7],
+ cerita:'Sekarang menunya dua: telur dan nasi, dengan porsi berbeda. Satu fungsi harus cukup untuk semuanya, dengan bahan dan porsi sebagai parameter.',
+ tujuan:'Masak 2 porsi telur dan 3 porsi nasi dengan satu fungsi yang sama.',api:['def nama(bahan, porsi):','robot.nyalakan(kompor)','robot.olah(bahan, porsi)'],
+ hari:[K('Contoh',80,{telur:5,nasi:5},20000,{telur:2,nasi:3}),K('Ulang',80,{telur:5,nasi:5},20000,{telur:2,nasi:3}),K('Kejutan: baterai awal 30',30,{telur:5,nasi:5},20000,{telur:2,nasi:3})],
+ kode:'def masak(bahan, porsi):\n    pass  # nyalakan kompor, lalu olah bahan sebanyak porsi\n\n# panggil masak untuk telur dan nasi\n',
+ hint:['Apa yang berbeda antara masak telur dan masak nasi? Itulah yang menjadi parameter.','Parameter dipakai di dalam fungsi seperti variabel biasa: robot.olah(bahan, porsi).','def masak(bahan, porsi):\n    robot....(kompor)\n    robot....(bahan, porsi)\n\nmasak("telur", ...)\nmasak(..., ...)']},
+{id:'2-3',b:2,dunia:'dapur',wajib:1,judul:'Belanja dulu',konsep:'return dan memanggil fungsi dari fungsi',man:[45,3],t3:[34,12],
+ cerita:'Stok bahan berbeda tiap hari. Kamu perlu fungsi yang menjawab "cukup atau tidak" (return True atau False), dan kalau tidak cukup, beli dulu di warung.',
+ tujuan:'Masak 4 porsi telur dan 3 porsi mie, belanja hanya kalau stok kurang.',api:['def nama(...):','return nilai','dapur.stok(bahan)','warung.beli(bahan, jumlah)','robot.nyalakan(kompor)','robot.olah(bahan, porsi)'],
+ hari:[K('Contoh',100,{telur:1,mie:0},20000,{telur:4,mie:3}),K('Biasa',100,{telur:2,mie:3},20000,{telur:4,mie:3}),K('Sibuk',100,{telur:0,mie:0},20000,{telur:4,mie:3}),K('Kejutan: baterai awal 40',40,{telur:1,mie:0},20000,{telur:4,mie:3}),K('Ekstrem: stok sudah lengkap',100,{telur:4,mie:3},20000,{telur:4,mie:3})],
+ kode:'def cek_stok(bahan, porsi):\n    pass  # return True kalau stok cukup, False kalau tidak\n\ndef masak(bahan, porsi):\n    pass  # beli dulu kalau stok kurang, lalu masak\n\n# masak 4 telur dan 3 mie\n',
+ hint:['Perbedaan stok dan kebutuhan menentukan: perlu belanja atau tidak? Fungsi mana yang menjawabnya?','cek_stok cukup satu baris: return dapur.stok(bahan) >= porsi. Pakai di masak dengan if not cek_stok(...).','if not cek_stok(bahan, porsi):\n    warung.beli(bahan, ...)\nrobot....(kompor)\nrobot....(bahan, porsi)']},
+{id:'2-4',b:2,dunia:'dapur',wajib:1,judul:'Tamu Mendadak',konsep:'fungsi buatan sendiri di bawah tenggat (Hari Kritis)',man:[60,3],t3:[38,14],
+ cerita:'Hari Kritis! Tamu datang mendadak dan makan siang harus siap sebelum 12.00. Stok dapur berbeda tiap hari, uang terbatas, dan setiap kali ke warung memakan 15 menit.',
+ tujuan:'Siapkan 3 telur, 4 nasi, dan 3 mie sebelum 12.00, dengan fungsi buatanmu sendiri.',api:['def nama(...):','return nilai','dapur.stok(bahan)','warung.beli(bahan, jumlah)','robot.nyalakan(kompor)','robot.olah(bahan, porsi)'],
+ hari:[KT('Contoh',100,{telur:3,nasi:1,mie:0},220),KT('Biasa',100,{telur:1,nasi:2,mie:3},220),KT('Sibuk',100,{telur:0,nasi:0,mie:0},205),KT('Kejutan: listrik mati (baterai awal 40)',40,{telur:0,nasi:0,mie:0},205),KT('Ekstrem: stok sudah lengkap',100,{telur:3,nasi:4,mie:3},240)],
+ kode:'# Fungsi dari level sebelumnya boleh dipakai ulang\ndef cek_stok(bahan, porsi):\n    pass\n\ndef masak(bahan, porsi):\n    pass\n\n# siapkan 3 telur, 4 nasi, dan 3 mie\n',
+ hint:['Waktu adalah batasnya. Belanja hanya kalau stok kurang, dan beli sebanyak kekurangannya saja.','Menyalakan kompor cukup sekali. Pikirkan di mana robot.nyalakan(kompor) sebaiknya diletakkan.','def masak(bahan, porsi):\n    if not cek_stok(bahan, porsi):\n        warung.beli(bahan, ...)\n    robot.olah(bahan, porsi)\n\nrobot.nyalakan(kompor)\nmasak(...)']}
+];
+const WHY={BateraiHabis:'Setiap langkah dan aksi memakai baterai. Pilih rute yang lebih pendek dan jangan menjalankan perintah yang tidak perlu.',PetakKosong:'Perintah dijalankan di tempat yang tidak ada bendanya. Periksa dulu sebelum bertindak.',NameError:'Python hanya mengenal nama yang sudah kamu buat. Kalau maksudmu teks, tulis dengan tanda kutip.',SalahTempat:'Setiap benda punya tempatnya: sampah dibuang, baju dicuci atau dijemur.',TempatJauh:'Botu harus berdiri di tempat tujuan dulu sebelum menaruh sesuatu.',LangkahTerlaluBanyak:'Loop while berhenti kalau syaratnya salah. Pastikan ada yang berubah di dalam loop.',TujuanBelumTercapai:'Kodemu jalan tanpa error, tapi tugasnya belum selesai. Cek apakah kodemu berlaku untuk semua situasi, bukan satu contoh.',SyntaxError:'Python teliti soal tanda baca: titik dua, tanda kurung, dan kutip.',IndentationError:'Isi if, for, while, dan def harus menjorok 4 spasi.',TypeError:'Ada perintah atau nilai yang salah tulis. Cek ejaan dan tanda kurungnya.',Terlambat:'Tugas selesai setelah tenggat. Kurangi langkah yang tidak perlu.',BajuBasah:'Menjemur saat hujan sia-sia. Cek cuaca() dan tunggu dulu dengan robot.tunggu().',TugasTidakDikenal:'Nama tugas harus persis: mandi, sarapan, bersih, atau berangkat.',UrutanSalah:'Berangkat harus paling akhir, dan tiap tugas cukup sekali.',JalanBuntu:'Botu hanya bisa lewat petak kosong. Pilih tujuan yang bukan kardus.',BahanHabis:'Bahan tidak cukup. Cek dapur.stok(bahan) dulu, dan beli kalau kurang.',KomporMati:'Memasak butuh kompor yang menyala. Panggil robot.nyalakan(kompor) dulu.',UangHabis:'Uang tidak cukup. Beli sebanyak kekurangannya saja.',FungsiDiperlukan:'Level ini meminta kamu membuat fungsi sendiri dengan def, lalu memanggilnya.'};
+const FC={};
+const cv=s=>s.replace(/\bTrue\b/g,'true').replace(/\bFalse\b/g,'false').replace(/\bNone\b/g,'null').replace(/\bnot\b/g,'!').replace(/\band\b/g,'&&').replace(/\bor\b/g,'||');
+
+function parse(src){
+ const L=src.replace(/\t/g,'    ').split('\n').map((t,i)=>({n:i+1,s:t.replace(/\s+#.*$/,'').trim(),ind:t.search(/\S|$/)})).filter(l=>l.s&&l.s[0]!=='#');
+ let p=0;const bad=(n,name,msg)=>({name,msg,l:n});
+ const blk=ind=>{const o=[];while(p<L.length&&L[p].ind>=ind){const l=L[p++];if(l.ind>ind)throw bad(l.n,'IndentationError','Indentasi baris ini tidak sejajar dengan baris sebelumnya.');const nd={n:l.n,s:l.s};if(l.s.endsWith(':')){if(p>=L.length||L[p].ind<=l.ind)throw bad(l.n,'IndentationError','Setelah titik dua harus ada baris yang menjorok ke dalam.');nd.body=blk(L[p].ind)}o.push(nd)}return o};
+ const t=L.length?blk(L[0].ind):[];if(p<L.length)throw bad(L[p].n,'IndentationError','Indentasi baris ini tidak sejajar.');return t}
+
+function mk(lv,d){
+ const r=rng(d.seed),items=[],used=new Set(['0,0','9,0']);
+ for(let i=0;i<d.n;i++){let x=9,y=7;if(d.fix)[x,y]=d.fix[i];else if(d.ex==='dekat'){x=3;y=0}else if(d.ex!=='pojok'){do{x=r()*10|0;y=r()*8|0}while(used.has(x+','+y));used.add(x+','+y)}items.push({x,y,t:lv.jemur||(lv.mix&&r()<.5)?'baju':'sampah'})}
+ return{pos:[0,0],items,hold:null,bat:d.cap,cap:d.cap,tick:0,log:[]}}
+
+const HG={telur:2000,mie:3000,nasi:2500};
+function mkD(d){return{pos:[0,0],items:[],hold:null,bat:d.cap,cap:d.cap,tick:d.mulai||0,log:[],stok:{...Object.fromEntries(Object.keys(d.need).map(b=>[b,0])),...d.stok},uang:d.uang,on:false,jadi:{},need:d.need}}
+const jt=t=>{const m=360+t;return String(m/60%24|0).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
+function mkP(d){return{pos:[0,0],items:[],hold:null,bat:d.cap,cap:d.cap,tick:0,log:[],stok:{},uang:0,on:false,jadi:{},need:{mandi:1,sarapan:1,bersih:1,berangkat:1},dur:d.dur}}
+function runDay(lv,d,tree){
+ const dk=!!lv.dunia,pg=lv.dunia==='pagi',w=pg?mkP(d):dk?mkD(d):mk(lv,d);let cur=0,steps=0;
+ const snap=txt=>w.log.push({l:cur,txt,pos:[...w.pos],items:w.items.map(i=>[i.x,i.y,i.t]),hold:w.hold,bat:w.bat,tick:w.tick,rain:d.hujan||0,dp:dk?{stok:{...w.stok},on:w.on,uang:w.uang,jadi:{...w.jadi},pg}:null});
+ const E=(name,msg)=>({name,msg});
+ const pay=c=>{if(w.bat<c)throw E('BateraiHabis','Baterai Botu habis di tengah tugas.');w.bat-=c};
+ const at=()=>w.items.findIndex(i=>i.x===w.pos[0]&&i.y===w.pos[1]);
+ const robot={
+  jalan_ke(p){if(!Array.isArray(p))throw E('PetakKosong','Tidak ada tujuan. kamar.kotoran_terdekat() mengembalikan None karena lantai sudah bersih.');
+   const K=(x,y)=>x+','+y,B=new Set((d.walls||[]).map(q=>K(...q))),P={},Q=[[w.pos[0],w.pos[1]]];P[K(...Q[0])]=null;
+   if(!B.has(K(...p)))for(let h=0;h<Q.length&&!(K(...p) in P);h++){const[x,y]=Q[h];[[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{const X=x+a,Y=y+b;if(X>=0&&X<10&&Y>=0&&Y<8&&!B.has(K(X,Y))&&!(K(X,Y) in P)){P[K(X,Y)]=[x,y];Q.push([X,Y])}})}
+   if(!(K(...p) in P))throw E('JalanBuntu','Botu tidak bisa mencapai ('+p+'): titiknya kardus, di luar kamar, atau terkurung.');
+   const path=[];for(let c=p;c;c=P[K(...c)])path.unshift(c);path.shift();
+   path.forEach((c,i)=>{pay(1);w.tick++;w.pos=[c[0],c[1]];snap(i===path.length-1?'jalan_ke('+p[0]+', '+p[1]+')':'')})},
+  lihat(){pay(1);w.tick++;const i=at();snap('lihat() -> '+(i<0?'None':'"'+w.items[i].t+'"'));return i<0?null:w.items[i].t},
+  buang(){pay(2);w.tick+=3;if(w.hold==='sampah'){w.hold=null;snap('buang()');return}const i=at();if(i<0)throw E('PetakKosong','Tidak ada benda di petak ini untuk dibuang.');if(w.items[i].t==='baju')throw E('SalahTempat','Itu baju, bukan sampah. Taruh di mesin cuci.');w.items.splice(i,1);snap('buang()')},
+  angkut(){pay(2);w.tick+=3;const i=at();if(i<0)throw E('PetakKosong','Tidak ada benda di petak ini untuk diangkut.');if(w.hold)throw E('SalahTempat','Capit Botu sudah memegang benda.');w.hold=w.items.splice(i,1)[0].t;snap('angkut() '+w.hold)},
+  taruh(t){pay(2);w.tick+=3;if(!w.hold)throw E('SalahTempat','Botu tidak sedang membawa apa pun.');if(w.hold!=='baju')throw E('SalahTempat','Hanya baju yang masuk mesin cuci. Sampah dibuang dengan robot.buang().');const T=lv.jemur?[9,7]:[9,0];if(w.pos[0]!==T[0]||w.pos[1]!==T[1])throw E('TempatJauh','Botu harus berada di '+(lv.jemur?'jemuran':'mesin cuci')+' ('+T+') untuk menaruh baju.');if(lv.jemur&&w.tick<(d.hujan||0))throw E('BajuBasah','Sedang hujan! Baju yang dijemur sekarang basah lagi.');w.hold=null;snap('taruh(mesin_cuci)')},
+  tunggu(m){if(!(m>0))throw E('TypeError','Lama menunggu harus angka positif.');w.tick+=m;snap('tunggu('+m+')')},
+  catat(t){snap('catat: '+t)}};
+ const kamar={bersih(){pay(1);return w.items.length===0&&!w.hold},kotoran_terdekat(){pay(1);let b=null,bd=1e9;w.items.forEach(i=>{const q=Math.abs(i.x-w.pos[0])+Math.abs(i.y-w.pos[1]);if(q<bd){bd=q;b=[i.x,i.y]}});return b}};
+ const D={stok:b=>w.stok?w.stok[b]||0:0,beli(b,n){if(!(n>0))throw E('TypeError','Jumlah harus angka positif.');pay(2);const c=(HG[b]||2000)*n;if(w.uang<c)throw E('UangHabis','Uang tidak cukup untuk '+n+' '+b+' (butuh Rp'+c+', punya Rp'+w.uang+').');w.uang-=c;w.stok[b]=(w.stok[b]||0)+n;w.tick+=10;snap('beli("'+b+'", '+n+')')}};
+ const RD={nyalakan(k){pay(2);w.on=true;w.tick++;snap('nyalakan(kompor)')},olah(b,n){if(!(n>0))throw E('TypeError','Jumlah porsi harus angka positif.');pay(3*n);if(!w.on)throw E('KomporMati','Kompor belum menyala. Panggil robot.nyalakan(kompor) dulu.');if((w.stok[b]||0)<n)throw E('BahanHabis','Stok '+b+' tinggal '+(w.stok[b]||0)+', padahal butuh '+n+'.');w.stok[b]-=n;w.jadi[b]=(w.jadi[b]||0)+n;w.tick+=10*n;snap('olah("'+b+'", '+n+')')},catat:t=>snap('catat: '+t)};
+ const env=Object.create(null);const RP={kerjakan(t){const du=w.dur[t];if(du===undefined)throw E('TugasTidakDikenal','Tugas "'+t+'" tidak dikenal. Pilih: mandi, sarapan, bersih, berangkat.');if(w.jadi[t])throw E('UrutanSalah','Tugas "'+t+'" sudah selesai dikerjakan.');if(t==='berangkat'&&!['mandi','sarapan','bersih'].every(x=>w.jadi[x]))throw E('UrutanSalah','Kamu berangkat sebelum mandi, sarapan, dan bersih-bersih selesai.');w.tick+=du;w.jadi[t]=1;snap('kerjakan("'+t+'")')},catat:t=>snap('catat: '+t)};
+ Object.assign(env,pg?{robot:RP,print:t=>snap('print: '+t)}:dk?{robot:RD,dapur:{stok:D.stok},warung:{beli:D.beli},kompor:'kompor',print:t=>snap('print: '+t)}:{robot,kamar,mesin_cuci:[9,0],jemuran:[9,7],cuaca:()=>w.tick<(d.hujan||0)?'hujan':'cerah',print:t=>snap('print: '+t)});
+ const prox=new Proxy(env,{has:()=>true,set:(t,k,v)=>(t[k]=v,true),get:(t,k)=>k===Symbol.unscopables?undefined:(k in t?t[k]:(()=>{throw{name:'NameError',msg:'Kamu memakai nama '+String(k)+' yang belum pernah dibuat. Mungkin maksudmu teks "'+String(k)+'" dengan tanda kutip?'}})())});
+ const ev=(s,n)=>{try{return(FC[s]||(FC[s]=new Function('E','with(E){return('+cv(s)+')}')))(prox)}catch(e){
+  if(e&&e.msg)throw{...e,l:e.l||n};const nm=e&&e.name||'Error';
+  throw{name:nm,l:n,msg:nm==='SyntaxError'?'Baris ini tidak bisa dibaca sebagai Python. Periksa titik dua, tanda kurung, dan tanda kutip.':nm==='TypeError'?'Perintah itu tidak ada atau dipakai dengan cara yang salah. Periksa ejaan namanya.':String(e&&e.message||e)}}};
+ const ex=b=>{for(let i=0;i<b.length;i++){const nd=b[i],s=nd.s;cur=nd.n;
+  if(++steps>10000)throw{name:'LangkahTerlaluBanyak',msg:'Skripmu berjalan terlalu lama. Mungkin ada loop yang tidak pernah berhenti?',l:nd.n};
+  let m;
+  if(m=s.match(/^for (\w+) in range\((.*)\):$/)){const a=ev('['+m[2]+']',nd.n),f=a.length>1?a[0]:0,e=a.length>1?a[1]:a[0];for(let k=f;k<e;k++){env[m[1]]=k;ex(nd.body)}}
+  else if(m=s.match(/^for (\w+) in (.+):$/)){const a=ev(m[2],nd.n);if(!Array.isArray(a))throw{name:'TypeError',msg:'Setelah in harus ada list atau range(...).',l:nd.n};for(const v of a){env[m[1]]=v;ex(nd.body)}}
+  else if(m=s.match(/^while (.*):$/)){while(ev(m[1],nd.n))ex(nd.body)}
+  else if(m=s.match(/^if (.*):$/)){let done=false;if(ev(m[1],nd.n)){ex(nd.body);done=true}
+   while(i+1<b.length&&/^(elif .*|else):$/.test(b[i+1].s)){const nx=b[++i];if(done)continue;const mm=nx.s.match(/^elif (.*):$/);if(!mm||ev(mm[1],nx.n)){ex(nx.body);done=true}}}
+  else if(m=s.match(/^def (\w+)\((.*)\):$/)){const ps=m[2].split(',').map(q=>q.trim()).filter(Boolean),body=nd.body;env[m[1]]=(...a)=>{ps.forEach((q,k)=>{env[q]=a[k]});try{ex(body)}catch(e){if(e&&e.ret)return e.v;throw e}}}
+  else if(m=s.match(/^return\b\s*(.*)$/))throw{ret:1,v:m[1]?ev(m[1],nd.n):null};
+  else if(/^(elif|else)\b/.test(s))throw{name:'SyntaxError',msg:'elif dan else harus mengikuti sebuah if.',l:nd.n};
+  else if(s==='pass'){}
+  else if(m=s.match(/^([A-Za-z_]\w*)\s*=(?!=)\s*(.+)$/))env[m[1]]=ev(m[2],nd.n);
+  else ev(s,nd.n)}};
+ let err=null;
+ try{snap('mulai');if(lv.wajib&&!tree.some(n=>n.s.startsWith('def ')))throw E('FungsiDiperlukan','Level ini meminta fungsi buatanmu sendiri dengan def, lalu memanggilnya.');ex(tree)}catch(e){err=e&&e.msg?e:{name:'Error',msg:String(e&&e.message||e),l:cur}}
+ if(!err&&dk&&!Object.entries(w.need).every(([b,n])=>(w.jadi[b]||0)>=n))err={name:'TujuanBelumTercapai',msg:'Skripmu selesai, tetapi target belum tercapai: '+Object.entries(w.need).map(([b,n])=>b+' '+(w.jadi[b]||0)+'/'+n).join(', ')+'.',l:0};
+ if(!err&&!dk&&(w.items.length||w.hold))err={name:'TujuanBelumTercapai',msg:'Skripmu selesai, tetapi masih ada '+w.items.length+' benda di lantai'+(w.hold?' dan Botu masih memegang '+w.hold:'')+'.',l:0};
+ if(!err&&d.tenggat&&w.tick>d.tenggat)err={name:'Terlambat',msg:'Selesai pukul '+jt(w.tick)+', melewati tenggat '+jt(d.tenggat)+'.',l:0};
+ return{w,err,ok:!err,used:d.cap-w.bat,d}}
+
+/* ---------- tampilan ---------- */
+const cvs=$('#dunia'),g=cvs.getContext('2d'),ta=$('#kode'),hl=$('#hl'),kons=$('#kons'),hasil=$('#hasil'),sp=$('#sp'),dlg=$('#dlg');
+const MAS='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAFCklEQVR4Ae2cq3JUQRCGTyiIAkUchYniBVCApYpCgo3aSMTmDfIGWYFkVQwiSAqCBsULoGJSuKBQXKoCtv+tOpPOzJw5M/PheufW/fXPTJ/ZsxkG/kEAAhCAAAQgAAEIQAACEIAABCDQC4Etb6CPj5eX3jE19f+8t3IzqSk+9fWGfoDdFwEE0Fe+N6JFABtI+vrgZmy4Lx79iJ2i6Ph3X+4WXb/04uwApTNQeH0EUDgBpZdHAKUzUHj96GdevReorSaIrQFqvzdgByj8P7D08gigdAYKr48ACieg9PLRNYAGUHtNoPGorTUDNYASwq6KAEdAVelK7ywCSM+0qhmT1wAafWs1gdYAGm9uO3XNwQ6QO2Mznx8BzDxBud1DALkJz3z+6BrgzdG2eUdw8er3zEPO697qfC/pAlpzUAMkxctkHAGdawABdC6Aq7wTaM545bV/YM/8/QPt4bMv/4z337o13p67NeRf7vVTz88OkJpoZfMhgMoSltpdBJCaaGXzXaUGMCEdndnn3IPdY9Mea4TO+Nzrq//eM1+f23W+udnsAHPLyMT+IICJgc9tOQQwt4xM7M91vgsYvReI9T905oZqhNzrh+Z/8nZpuqS+uzeTJzDYARJArHkKBFBz9hL4jgASQKx5Cvc9QM3BlvBd34mM9SF1TcEOEJuRyscjgMoTGOs+AoglWPn469QA5u5g6ncCQ/cE0fn49N5O8fS5tQPtqf8+Qu7vFtgBbHq7sxBAdym3ASMAy6M76zo1QNuQnGd+7TDYAWrPYKT/CCASYO3DEUDtGYz0f/IaYP1627gc+1vC1PMNgef8UPvp+quJ7+XOmbFDxsnFruly21jDoPcu0uw22QHcyNoagADayqc7GgTgRtbWgMlrAMWnZ7i2T27rPYA6EGqX/t4a5+f5Q5nBmov73+wHTkt5swM4AbbWHQG0llFnPAjACay17pPXAN4zsTbg3ud+PZNPL+w9gsZ/Z8feo2i7ly87gBLszEYAnSVcw0UASqQzO3kNoGdaaZ7eM7G0vx8Ofc/5zw4fGJdD9whaY7ADGHz9GQigv5ybiBGAwdGfEV0D/P87geZ3AqkR6vffi+X31EvIfDvW/usLT7/P957Ji8FXA1hn/RY7gJ9ZUyMQQFPp9AeDAPzMmhoRXQPMjcZ6dS/KpcXyV9T42MF6j5L7HoMdIDZjlY9HAJUnMNZ9BBBLsPLxwRpAn8O98ea+Jwj5EzpD9cwNzZe63Xv3r+vr+wehdwb1fQJ2ACXamY0AOku4hosAlEhndrAGUB5zP1PV36ltPZNP1tYDbV8P9h0//S7Bjt60dL7NHuOfsAOM82m+FQE0n+LxABHAOJ/mW901QG1Epn7O1xrJ+/1+6P0B5R967tf+arMDKJHObATQWcI1XASgRDqz3TXA1GeqNx/53xn0elS2fyhf7ABl81N8dQRQPAVlHUAAZfkXX9330nsBd73vI+hzuLocOhO1v9q558/9XYC+n8EOoBnuzEYAnSVcw0UASqQz230PMDUfPbN0fW+NoONLz6/+DM7fBn7cnMD1CTuAC1d7nRFAezl1RYQAXLja64wA2supKyIE4MLVXmcE0F5OXREhABeu9jrP/h7Aizz2rj+0Xu75Q+unbmcHSE20svkQQGUJS+0uAkhNlPkgAAEIQAACEIAABCAAAQhAAAIQgAAEIAABCEAAAhCAAAQgAAEIQAACEIBAYQL/AIoa0PqrZdt/AAAAAElFTkSuQmCC';
+document.querySelectorAll('.mas').forEach(i=>i.src=MAS);
+let li=0,LOG=[],I=0,TM=null,ERR=null,READY=false,hintN=0,hintUsed=false,SN=null,TS=[],TI=0;
+const lv=()=>LV[li];
+const lines=src=>src.split('\n').filter(l=>{const t=l.trim();return t&&t[0]!=='#'}).length;
+const store=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+const starTxt=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+const star=id=>+store('ls_star_'+id)||0,bLv=b=>LV.filter(L=>L.b===b);
+LV.forEach(L=>{if(L.t3[0])L.t3[0]=Math.ceil(L.t3[0]*1.25);L.t3[1]+=1});
+const BAB=[['Hari Pertama di Kos Melati (tutorial)','Urutan perintah, argumen, error pertama',4],['Morning Routine dan Room Cleanup','Variabel, loop, if-else',5],['Dapur Kos','Fungsi, parameter, return',4],['The Digital Chaos: File Organization','List, string, dictionary, try/except',5],['Pesan Masuk','String, f-string, template',4],['Tanggal Tua: Budget Planner','Dictionary, agregasi',5],['Rute Pulang (side quest)','Graph, BFS, antrean',4],['Proyek Kelompok (side quest)','Dependensi, urutan topologis',4],['Social and Study Balancing Act','Fungsi skor, priority queue',5],['Minggu Ujian (capstone)','Menggabungkan semuanya',4]];
+const babOpen=b=>bLv(b).length>0&&(b===0||bLv(b-1).every(L=>star(L.id)>0));
+const lvOpen=L=>{const a=bLv(L.b),k=a.indexOf(L);return k===0?babOpen(L.b):star(a[k-1].id)>0};
+const cur=()=>Math.max(0,LV.findIndex(L=>lvOpen(L)&&!star(L.id)));
+const wt=()=>lv().jemur||lv().hari[0].tenggat;
+const TUR={
+'0-1':[['#dunia','Ini kamar tempat Botu bekerja. Botu ada di kiri atas, kotak cokelat adalah sampah. Angka di tepi kamar adalah koordinat.'],['#edwrap','Tulis kode Python di sini, satu perintah per baris.'],['#perintah','Ini perintah yang boleh dipakai di level ini.'],['#bJalan','Jalankan: coba kodemu dan lihat Botu bergerak. Gratis, boleh berkali-kali.'],['#bKirim','Kirim: kodemu diuji di beberapa situasi. Kalau lulus, kamu dapat bintang dan level berikutnya terbuka.'],['#bHint','Buntu? Tekan Hint. Hint tidak mengurangi bintang.'],['#wBat','Baterai adalah jatah langkah Botu. Tiap langkah dan aksi memakainya, jadi pilih cara yang hemat.'],['#kons','Konsol menampilkan apa yang dikerjakan Botu, dan penjelasan kalau ada error.']],
+'0-3':[['#edwrap','Materi baru: error. Tekan Jalankan dulu dan baca penjelasannya di Konsol. Error adalah petunjuk, bukan kegagalan.'],['#dunia','Kotak cokelat besar adalah kardus. Botu tidak bisa menembusnya, tapi bisa mencari jalan memutar.']],
+'0-4':[['#wBat','Materi baru: hemat baterai. Di level ini baterai terbatas, jadi urutan kunjungan penting.']],
+'1-1':[['#edwrap','Materi baru: perulangan for. "for i in range(5):" mengulang isi di bawahnya 5 kali. Isinya harus menjorok 4 spasi.'],['#perintah','kamar.kotoran_terdekat() memberi letak sampah terdekat, jadi kamu tidak perlu menulis koordinat satu per satu.']],
+'1-2':[['#edwrap','Materi baru: if dan elif. Botu memeriksa benda di petak (robot.lihat()), lalu memilih tindakan: buang sampah atau angkut baju.']],
+'1-3':[['#edwrap','Materi baru: while. Loop ini jalan terus selama syaratnya benar, cocok kalau jumlah benda berubah tiap situasi.']],
+'1-4':[['#perintah','Materi baru: cuaca() dan robot.tunggu(). Menunggu tidak memakai baterai, tapi memakan waktu.'],['#wJam','Jam game berjalan saat Botu bergerak atau menunggu. Hujan baru reda setelah jam tertentu.']],
+'1-5':[['#wJam','Level penutup babak: ada tenggat. Botu harus berangkat sebelum 07.30.'],['#edwrap','Materi baru: list. Simpan nama tugas dalam list, lalu "for tugas in urutan:" mengerjakannya satu per satu.']],
+'2-1':[['#edwrap','Materi baru: fungsi. "def nama():" membungkus beberapa perintah supaya bisa dipanggil berkali-kali dengan menulis nama().']],
+'2-2':[['#edwrap','Materi baru: parameter. Nilai di dalam tanda kurung (misalnya bahan dan porsi) membuat satu fungsi bisa dipakai untuk banyak kasus.']],
+'2-3':[['#edwrap','Materi baru: return. Fungsi bisa memberi jawaban balik, misalnya True atau False, yang bisa dipakai di if.']],
+'2-4':[['#wJam','Level penutup babak: semua hidangan harus siap sebelum 12.00. Setiap ke warung memakan waktu.']]};
+function peta(){const box=$('#petag');box.innerHTML='';$('#bMain').textContent=LV.some(L=>star(L.id))?'Lanjutkan Main':'Mulai Main';
+ BAB.forEach(([nm,kn,tot],b)=>{const a=bLv(b),open=babOpen(b),done=a.filter(L=>star(L.id)>0).length,x=document.createElement('button');x.type='button';x.className='bab panel';x.disabled=!open;
+ x.innerHTML='<b class="pix">Babak '+b+'</b><br>'+esc(nm)+'<br><span class="mono">'+esc(kn)+'</span><br><b>'+(!a.length?'Segera hadir':open?done+' dari '+a.length+' level selesai':'Terkunci')+'</b>';
+ x.onclick=()=>go(LV.indexOf(a.find(L=>lvOpen(L)&&!star(L.id))||a[0]));box.appendChild(x)})}
+function draw(s){const T=40;SN=s;if(s.dp)return drawD(s);
+ for(let y=0;y<8;y++)for(let x=0;x<10;x++){g.fillStyle=(x+y)%2?'#F0E1C6':'#E9D5AE';g.fillRect(x*T,y*T,T,T)}
+ g.font='10px monospace';g.fillStyle='rgba(59,42,36,.55)';for(let i=0;i<10;i++)g.fillText(i,i*T+3,10);for(let i=1;i<8;i++)g.fillText(i,3,i*T+12);
+ (lv().hari[0].walls||[]).forEach(([x,y])=>{g.fillStyle='#B07A4A';g.strokeStyle='#3B2A24';g.lineWidth=2;g.fillRect(x*T+3,y*T+3,34,34);g.strokeRect(x*T+3,y*T+3,34,34);g.beginPath();g.moveTo(x*T+3,y*T+20);g.lineTo(x*T+37,y*T+20);g.stroke()});
+ if(lv().mix){g.fillStyle='#FFFDF8';g.fillRect(9*T+4,4,32,32);g.strokeStyle='#3B2A24';g.lineWidth=2;g.strokeRect(9*T+4,4,32,32);g.beginPath();g.arc(9*T+20,22,9,0,7);g.stroke()}
+ s.items.forEach(([x,y,t])=>{const X=x*T,Y=y*T;g.strokeStyle='#3B2A24';g.lineWidth=2;
+  if(t==='sampah'){g.fillStyle='#8A5A3B';g.fillRect(X+10,Y+14,20,16);g.strokeRect(X+10,Y+14,20,16);g.fillStyle='#C98F5A';g.fillRect(X+14,Y+10,8,6)}
+  else{g.fillStyle='#9B87C9';g.fillRect(X+8,Y+10,24,20);g.strokeRect(X+8,Y+10,24,20);g.fillRect(X+3,Y+10,6,8);g.fillRect(X+31,Y+10,6,8)}});
+ const X=s.pos[0]*T,Y=s.pos[1]*T;g.lineWidth=2;g.strokeStyle='#3B2A24';
+ g.fillStyle=s.bat>150?'#6FA66B':s.bat>60?'#F2C14E':'#D9626B';g.fillRect(X+18,Y+1,4,6);
+ g.fillStyle='#6AA7C9';g.fillRect(X+6,Y+22,28,14);g.strokeRect(X+6,Y+22,28,14);
+ g.fillStyle='#2B2A3A';g.fillRect(X+8,Y+7,24,16);g.strokeRect(X+8,Y+7,24,16);
+ g.fillStyle='#9BE08F';g.fillRect(X+13,Y+12,5,5);g.fillRect(X+22,Y+12,5,5);
+ if(s.hold){g.fillStyle=s.hold==='baju'?'#9B87C9':'#8A5A3B';g.fillRect(X+30,Y+16,8,8);g.strokeRect(X+30,Y+16,8,8)}
+ g.fillStyle='rgba(255,233,184,.15)';g.fillRect(0,0,400,320);
+ if(lv().jemur){g.strokeStyle='#3B2A24';g.lineWidth=3;g.beginPath();g.moveTo(9*T+4,7*T+10);g.lineTo(9*T+36,7*T+10);g.moveTo(9*T+6,7*T+10);g.lineTo(9*T+6,7*T+36);g.moveTo(9*T+34,7*T+10);g.lineTo(9*T+34,7*T+36);g.stroke();const hj=s.tick<(s.rain||0);g.font='bold 13px monospace';g.fillStyle=hj?'#3A6EA5':'#3B2A24';g.fillText(hj?'HUJAN':'CERAH',334,314);if(hj){g.strokeStyle='rgba(58,110,165,.6)';g.lineWidth=1;g.beginPath();for(let i=0;i<40;i++){const x=(i*37)%400,y=(i*53)%320;g.moveTo(x,y);g.lineTo(x-4,y+9)}g.stroke()}}}
+
+function drawD(s){const d=s.dp;g.fillStyle='#F0E1C6';g.fillRect(0,0,400,320);g.lineWidth=2;g.strokeStyle='#3B2A24';g.font='bold 15px monospace';
+ const bx=(x,y,a,b,c)=>{g.fillStyle=c;g.fillRect(x,y,a,b);g.strokeRect(x,y,a,b);g.fillStyle='#3B2A24'};
+ if(d.pg){bx(16,16,368,64,'#FFFDF8');g.fillText('Jam '+jt(s.tick)+'    Tenggat berangkat 07:30',28,54);bx(16,96,368,208,'#FFFDF8');g.fillText('Daftar tugas',28,122);['mandi','sarapan','bersih','berangkat'].forEach((t,i)=>g.fillText((d.jadi[t]?'[x] ':'[ ] ')+t,28,152+i*28));return}
+ bx(16,16,160,64,d.on?'#E07A3F':'#BBA98E');g.fillText('KOMPOR',28,42);g.fillText(d.on?'MENYALA':'MATI',28,66);
+ bx(192,16,192,64,'#FFFDF8');g.fillText('Uang',204,42);g.fillText('Rp'+d.uang,204,66);
+ bx(16,96,176,208,'#FFFDF8');g.fillText('Stok dapur',28,122);Object.entries(d.stok).forEach(([b,n],i)=>g.fillText(b+': '+n,28,148+i*24));
+ bx(208,96,176,208,'#FFFDF8');g.fillText('Hidangan jadi',220,122);Object.entries(d.jadi).forEach(([b,n],i)=>g.fillText(b+': '+n,220,148+i*24))}
+function hline(l,isErr){if(!l){hl.hidden=true;return}hl.hidden=false;hl.className='hl'+(isErr?' err':'');hl.style.top=(8+(l-1)*24-ta.scrollTop)+'px'}
+function show(i){const s=LOG[i];draw(s);$('#bat').textContent=s.bat;$('#jam').textContent=jt(s.tick);const last=i===LOG.length-1;hline(last&&ERR?ERR.l:s.l,last&&!!ERR);
+ if(s.txt){kons.textContent+=(kons.textContent?'\n':'')+'baris '+s.l+': '+s.txt+' (baterai '+s.bat+')';kons.scrollTop=1e9}
+ if(last&&ERR)kons.textContent+='\n'+ERR.name+': '+ERR.msg}
+function stop(){clearInterval(TM);TM=null}
+function play(res){stop();LOG=res.w.log;I=0;kons.textContent='';show(0);TM=setInterval(()=>{if(I>=LOG.length-1){stop();return}show(++I)},Math.max(16,420/+sp.value))}
+function pm(e){return'<div class="pm"><p><b>Apa yang terjadi:</b> '+esc(e.name)+': '+esc(e.msg)+'</p>'+(e.l?'<p><b>Di baris mana:</b> baris '+e.l+' (disorot di editor).</p>':'')+'<p><b>Kenapa begitu:</b> '+esc(WHY[e.name]||'Periksa kembali baris itu.')+'</p></div>'}
+function hemat(){return'<p class="ok">Dikerjakan sendiri: '+lv().man[0]+' energi dan '+lv().man[1]+' jam. Dengan kodemu, semua itu terhemat.</p>'}
+function prep(){let tree;ERR=null;
+ try{tree=parse(ta.value)}catch(e){ERR=e;LOG=[{l:e.l,txt:'',pos:[0,0],items:[],hold:null,bat:0,tick:0}];hasil.innerHTML=pm(e);hline(e.l,true);READY=false;return null}
+ const r=runDay(lv(),lv().hari[0],tree);ERR=r.err;READY=true;
+ hasil.innerHTML=r.ok?'<p class="ok">Berhasil di situasi contoh!</p><p>Baterai terpakai '+r.used+', '+lines(ta.value)+' baris kode.</p>'+hemat()+'<p>Tekan <b>Kirim</b> untuk menguji di situasi lain.</p>':pm(r.err);
+ return r}
+function jalan(){const r=prep();if(r)play(r)}
+function langkah(){stop();if(!READY){const r=prep();if(!r)return;LOG=r.w.log;I=-1;kons.textContent=''}if(I<LOG.length-1)show(++I)}
+function modal(html,acts){$('#dbody').innerHTML='<img class="mas kecil" alt="" src="'+MAS+'">'+html;const bx=$('#dact');bx.innerHTML='';acts.forEach(([t,c,fn])=>{const b=document.createElement('button');b.type='button';b.className='tombol '+c;b.textContent=t;b.onclick=()=>{dlg.close();if(fn)fn()};bx.appendChild(b)});if(!dlg.open)dlg.showModal()}
+function openHint(k){hintUsed=true;hintN=k;const h=lv().hint;modal('<h3 class="pix">Hint '+(k+1)+' dari '+h.length+'</h3><p>Hint tidak mengurangi bintang.</p><pre class="mono" style="white-space:pre-wrap;margin:0">'+esc(h[k])+'</pre>',(k>0?[['Hint sebelumnya','garis',()=>openHint(k-1)]]:[]).concat(k<h.length-1?[['Hint lebih detail','madu',()=>openHint(k+1)]]:[]).concat([['Tutup','garis']]))}
+function kirim(){stop();let tree;try{tree=parse(ta.value)}catch(e){prep();return}
+ const L=lv(),R=L.hari.map(d=>runDay(L,d,tree)),n=lines(ta.value);
+ const s1=R[0].ok&&R[1].ok,s2=R.every(r=>r.ok),s3=s2&&R[1].used<=L.t3[0]&&n<=L.t3[1],stars=s3?3:s2?2:s1?1:0;
+ store('ls_star_'+L.id,Math.max(stars,star(L.id)));tabs();setStar();
+ const msg=['Belum lulus. Lihat situasi yang gagal, lalu perbaiki kodemu.','Lulus! Kodemu bekerja di situasi contoh dan situasi biasa.','Bagus! Kodemu bekerja di semua situasi.','Sempurna! Kodemu bekerja, singkat, dan hemat.'][stars];
+ let h='<h3 class="pix">'+(stars?'Level selesai!':'Belum lulus')+'</h3><p class="bintang">'+starTxt(stars)+'</p><p>'+msg+'</p><p class="mono">Kirim mencoba kodemu di '+R.length+' situasi berbeda, supaya kodemu tidak cuma cocok untuk satu contoh.</p><ul class="rm">'+R.map((r,i)=>'<li>Situasi '+(i+1)+' ('+esc(r.d.k)+'): '+(r.ok?'<span class="ok">lulus</span>':'<span class="gagal">gagal</span>')+'</li>').join('')+'</ul>'
+  +(stars<3?'<p><b>Untuk bintang 3:</b> lulus semua situasi, maksimal '+L.t3[1]+' baris'+(L.t3[0]?', dan baterai di situasi 2 maksimal '+L.t3[0]:'')+'. Kamu: '+n+' baris'+(L.t3[0]?', baterai '+R[1].used:'')+'.</p>':'<p class="ok">'+(hintUsed?'':'Lencana Mandiri: tanpa hint! ')+'Singkat dan hemat.</p>')+(R[0].ok?hemat():'');
+ const f=R.find(r=>!r.ok);ERR=f?f.err:null;READY=false;
+ if(f)h+='<p><b>Situasi yang gagal: '+esc(f.d.k)+'</b></p>'+pm(f.err);
+ const a=bLv(L.b),nx=stars>0?(a[a.indexOf(L)+1]||bLv(L.b+1)[0]):null,acts=[];
+ if(stars>0){
+  if(nx&&nx.b!==L.b)h+='<p><b>Babak '+L.b+' selesai!</b> Berikutnya: Babak '+nx.b+', '+esc(BAB[nx.b][0])+'.</p>';
+  if(nx)acts.push([nx.b!==L.b?'Lanjut ke Babak '+nx.b:'Lanjut ke level '+nx.id,'madu',()=>go(LV.indexOf(nx))]);
+  else{h+='<p><b>Babak '+L.b+' selesai!</b> Babak berikutnya segera hadir.</p>';acts.push(['Lihat Peta Babak','madu',()=>{view('home');$('#peta').scrollIntoView()}])}}
+ if(f)acts.push(['Lihat situasi yang gagal','garis',()=>play(f)]);
+ acts.push([stars>0?'Tetap di level ini':'Perbaiki kode','garis']);
+ modal(h,acts)}
+function setStar(){$('#bin').textContent=starTxt(star(lv().id))}
+function tabs(){$('#tabs').innerHTML='';bLv(lv().b).forEach(L=>{const i=LV.indexOf(L),b=document.createElement('button');b.type='button';b.className='tombol garis';b.setAttribute('role','tab');b.setAttribute('aria-pressed',i===li);b.disabled=!lvOpen(L);b.textContent=L.id+' '+(lvOpen(L)?starTxt(star(L.id)):'(terkunci)');b.onclick=()=>load(i);$('#tabs').appendChild(b)});peta()}
+function brief(){const L=lv();$('#brief').innerHTML='<h3 class="pix" style="margin:0 0 8px">'+esc(L.id+' · '+L.judul)+'</h3><p>'+esc(L.cerita)+'</p><p><b>Tujuanmu:</b> '+esc(L.tujuan)+'</p><p><b>Materi:</b> '+esc(L.konsep)+'.</p><p class="mono">Baterai: '+L.hari[0].cap+' (jatah langkah)'+(wt()?'. Ada tenggat waktu.':'.')+'</p><button id="bMulai" type="button" class="tombol madu">Mulai Mengerjakan</button>';$('#bMulai').onclick=()=>screen('main');
+ $('#perintah').innerHTML='<b>Perintah yang tersedia</b><ul class="cmd">'+L.api.map(a=>'<li>'+esc(a)+'</li>').join('')+'</ul>'}
+function gutter(){$('#gut').textContent=ta.value.split('\n').map((_,i)=>i+1).join('\n')}
+function endTour(){document.querySelectorAll('.spot').forEach(e=>e.classList.remove('spot'));$('#tb').hidden=true;$('#tov').hidden=true}
+function tstep(){document.querySelectorAll('.spot').forEach(e=>e.classList.remove('spot'));
+ if(TI>=TS.length){endTour();store('cmy_tur_'+lv().id,'1');return}
+ const el=$(TS[TI][0]);if(!el||el.offsetParent===null){TI++;return tstep()}
+ $('#tov').hidden=false;el.scrollIntoView({block:'center',behavior:'instant'});el.classList.add('spot');
+ const b=$('#tb');$('#tt').textContent=TS[TI][1];$('#tn').textContent=(TI+1)+'/'+TS.length;$('#tnext').textContent=TI===TS.length-1?'Selesai':'Lanjut';b.hidden=false;
+ const r=el.getBoundingClientRect(),bh=b.offsetHeight,bw=b.offsetWidth;let y=r.bottom+14;if(y+bh>innerHeight-8)y=r.top-bh-14;if(y<8)y=innerHeight-bh-8;b.style.top=y+'px';b.style.left=Math.min(Math.max(8,r.left),innerWidth-bw-8)+'px'}
+function tour(st){if(!st)return;TS=st;TI=0;tstep()}
+function screen(s){endTour();$('#sSoal').hidden=s!=='soal';$('#sMain').hidden=s!=='main';scrollTo(0,0);if(s==='main'){const t=TUR[lv().id];if(t&&!store('cmy_tur_'+lv().id))setTimeout(()=>tour(t),150)}}
+function view(v){endTour();$('#vHome').hidden=v!=='home';$('#vGame').hidden=v!=='game';scrollTo(0,0);if(v==='home')peta()}
+function go(i){load(i);view('game')}
+function load(i,keep){stop();endTour();li=i;hintN=0;hintUsed=false;ERR=null;READY=false;LOG=[];kons.textContent='';hasil.innerHTML='';ta.value=store('ls_code_'+lv().id)||lv().kode;$('#jl').textContent=lv().id+' · '+lv().judul;$('#bab').textContent='Babak '+lv().b+': '+BAB[lv().b][0];gutter();brief();tabs();setStar();hline(0);$('#wJam').hidden=!wt();
+ const h0=lv().hari[0],dn=lv().dunia,w=dn==='pagi'?mkP(h0):dn==='dapur'?mkD(h0):mk(lv(),h0);draw({pos:w.pos,items:w.items.map(t=>[t.x,t.y,t.t]),hold:null,bat:w.bat,tick:w.tick,rain:h0.hujan||0,dp:dn?{stok:w.stok,on:false,uang:w.uang,jadi:{},pg:dn==='pagi'}:null});$('#bat').textContent=w.bat;$('#jam').textContent=jt(w.tick);
+ if(!keep)screen('soal')}
+
+ta.addEventListener('input',()=>{READY=false;gutter();store('ls_code_'+lv().id,ta.value)});
+ta.addEventListener('scroll',()=>{$('#gut').scrollTop=ta.scrollTop;if(!hl.hidden)hline(LOG[I]?LOG[I].l:0,!!ERR)});
+ta.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();ta.setRangeText('    ',ta.selectionStart,ta.selectionEnd,'end');ta.dispatchEvent(new Event('input'))}else if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();jalan()}});
+cvs.addEventListener('click',e=>{const r=cvs.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*10|0,y=(e.clientY-r.top)/r.height*8|0;const it=SN&&SN.items?SN.items.filter(i=>i[0]===x&&i[1]===y).map(i=>i[2]):[];$('#insp').textContent='Petak ('+x+', '+y+'): '+(it.length?it.join(', '):'kosong')});
+$('#bJalan').onclick=jalan;$('#bLangkah').onclick=langkah;$('#bKirim').onclick=kirim;$('#bReset').onclick=()=>{store('ls_code_'+lv().id,'');load(li,true)};
+$('#bHint').onclick=()=>openHint(Math.min(hintN,lv().hint.length-1));
+$('#bSoal').onclick=()=>screen('soal');$('#bPandu').onclick=()=>tour(TUR['0-1'].concat(lv().id==='0-1'?[]:(TUR[lv().id]||[])));
+$('#bMain').onclick=()=>go(cur());$('#bCara').onclick=()=>$('#cara').scrollIntoView({behavior:'smooth'});$('#bHome').onclick=()=>view('home');
+$('#tnext').onclick=()=>{TI++;tstep()};$('#tskip').onclick=()=>{TI=TS.length;tstep()};
+document.querySelectorAll('.btema').forEach(b=>b.onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'});
+load(cur());view('home');
+})();
+</script>
+</body>
+</html>
