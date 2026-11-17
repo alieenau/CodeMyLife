@@ -541,7 +541,7 @@ function prep(){let tree;ERR=null;
 function jalan(){const r=prep();if(r)play(r)}
 function langkah(){stop();if(!READY){const r=prep();if(!r)return;LOG=r.w.log;I=-1;kons.textContent=''}if(I<LOG.length-1)show(++I)}
 function modal(html,acts){$('#dbody').innerHTML='<img class="mas kecil" alt="" src="'+MAS+'">'+html;const bx=$('#dact');bx.innerHTML='';acts.forEach(([t,c,fn])=>{const b=document.createElement('button');b.type='button';b.className='tombol '+c;b.textContent=t;b.onclick=()=>{dlg.close();if(fn)fn()};bx.appendChild(b)});if(!dlg.open)dlg.showModal()}
-function openHint(k){hintUsed=true;hintN=k;const h=lv().hint;modal('<h3 class="pix">Hint '+(k+1)+' dari '+h.length+'</h3><p>Hint tidak mengurangi bintang.</p><pre class="mono" style="white-space:pre-wrap;margin:0">'+esc(h[k])+'</pre>',(k<h.length-1?[['Hint lebih detail','madu',()=>openHint(k+1)]]:[]).concat([['Tutup','garis']]))}
+function openHint(k){hintUsed=true;hintN=k;const h=lv().hint;modal('<h3 class="pix">Hint '+(k+1)+' dari '+h.length+'</h3><p>Hint tidak mengurangi bintang.</p><pre class="mono" style="white-space:pre-wrap;margin:0">'+esc(h[k])+'</pre>',(k>0?[['Hint sebelumnya','garis',()=>openHint(k-1)]]:[]).concat(k<h.length-1?[['Hint lebih detail','madu',()=>openHint(k+1)]]:[]).concat([['Tutup','garis']]))}
 function kirim(){stop();let tree;try{tree=parse(ta.value)}catch(e){prep();return}
  const L=lv(),R=L.hari.map(d=>runDay(L,d,tree)),n=lines(ta.value);
  const s1=R[0].ok&&R[1].ok,s2=R.every(r=>r.ok),s3=s2&&R[1].used<=L.t3[0]&&n<=L.t3[1],stars=s3?3:s2?2:s1?1:0;
